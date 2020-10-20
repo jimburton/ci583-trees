@@ -26,4 +26,7 @@ public class Leaf extends BST{
 
     @Override
     public BST merge(BST that) { throw new UnsupportedOperationException("Method not implemented"); }
+
+    @Override
+    public String toString() { return label + ""; }
 }

@@ -44,7 +44,7 @@ public abstract class BST {
     abstract public BST merge(BST that);
 
     /*
-    Helper methods for printing trees
+    Helper methods for printing trees from https://www.baeldung.com/java-print-binary-tree-diagram
      */
     public static String traversePreOrder(BST root) {
 

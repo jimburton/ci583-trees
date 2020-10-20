@@ -46,4 +46,11 @@ public class Branch extends BST {
     public BST merge(BST that) {
         throw new UnsupportedOperationException("Method not implemented");
     }
+
+    @Override
+    public String toString() {
+        String l = (left == null) ? "" : left.toString() + " ";
+        String r = (right == null) ? "" : " " + right.toString();
+        return l + label + r;
+    }
 }
