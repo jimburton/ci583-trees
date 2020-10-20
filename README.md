@@ -6,7 +6,7 @@ nodes is always *less than* the label of the left-hand child, and *greater than*
 the right-hand child (if these children exist). The labels of the nodes can be
 any data for which "less than" and "greater than" makes sense. 
 Refer to the slides from Week 3 for a
-refreshere on how trees work and the terminology around them.
+refresher on how trees work and the terminology around them.
 
 Our BST has `int` data in the labels of nodes. The implementation uses *inheritance* and
 *recursion*. In the package `ci583.trees` is the *superclass* of all tree nodes, `BST`. This
