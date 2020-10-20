@@ -2,7 +2,7 @@ package ci583.trees;
 
 public class Leaf extends BST{
     public Leaf(int label) {
-        this.label = label;
+        super(label);
     }
 
     // Exercises
@@ -11,7 +11,9 @@ public class Leaf extends BST{
     public BST insert(int e) { throw new UnsupportedOperationException("Method not implemented"); }
 
     @Override
-    public String toString() { throw new UnsupportedOperationException("Method not implemented"); }
+    public boolean search(int e) {
+        return false;
+    }
 
     @Override
     public int countNodes() { throw new UnsupportedOperationException("Method not implemented"); }
@@ -23,5 +25,5 @@ public class Leaf extends BST{
     public BST remove(int e) { throw new UnsupportedOperationException("Method not implemented"); }
 
     @Override
-    protected BST merge(BST that) { throw new UnsupportedOperationException("Method not implemented"); }
+    public BST merge(BST that) { throw new UnsupportedOperationException("Method not implemented"); }
 }

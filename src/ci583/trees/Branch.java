@@ -5,7 +5,7 @@ public class Branch extends BST {
     private BST right;
 
     public Branch(int label, BST left, BST right) {
-        this.label = label;
+        super(label);
         this.left = left;
         this.right = right;
     }
@@ -23,8 +23,8 @@ public class Branch extends BST {
     public BST insert(int e) { throw new UnsupportedOperationException("Method not implemented"); }
 
     @Override
-    public String toString() {
-        throw new UnsupportedOperationException("Method not implemented");
+    public boolean search(int e) {
+        return false;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Branch extends BST {
     }
 
     @Override
-    protected BST merge(BST that) {
+    public BST merge(BST that) {
         throw new UnsupportedOperationException("Method not implemented");
     }
 }
