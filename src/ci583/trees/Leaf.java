@@ -8,7 +8,9 @@ public class Leaf extends BST{
     // Exercises
 
     @Override
-    public BST insert(int e) { throw new UnsupportedOperationException("Method not implemented"); }
+    public BST insert(int e) {
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 
     @Override
     public boolean search(int e) {

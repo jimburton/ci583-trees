@@ -3,8 +3,7 @@ package ci583.trees;
 import java.io.PrintStream;
 
 /*
- * This is an ADT for a Binary Search Tree which contains ints as data. Implement concrete versions of the methods
- * below in the two subclasses of BST, which are Branch and Leaf.
+ * This is an ADT for a Binary Search Tree which contains ints as data.
  */
 public abstract class BST {
     protected int label;
