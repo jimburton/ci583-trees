@@ -58,7 +58,9 @@ public class Branch extends BST {
 
     @Override
     public int countNodes() {
-        return 1 + left.countNodes() + right.countNodes();
+        int ln = (left == null) ? 0 : left.countNodes();
+        int rn = (right == null) ? 0 : right.countNodes();
+        return 1 + ln + rn;
     }
 
     @Override

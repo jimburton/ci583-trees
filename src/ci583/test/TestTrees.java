@@ -24,14 +24,17 @@ public class TestTrees {
     @Test
     public void testInsertAndCountNodes() {
         tree = new Leaf(42);
+        assertEquals(tree.countNodes(), 1);
         tree = tree.insert(23);
+        assertEquals(tree.countNodes(), 2);
         tree = tree.insert(66);
+        assertEquals(tree.countNodes(), 3);
         tree = tree.insert(66);
+        assertEquals(tree.countNodes(), 3);
         BST.printTree(System.out, tree);
         assertEquals(tree.getLabel(), 42);
         assertEquals(((Branch)tree).getLeft().getLabel(), 23);
         assertEquals(((Branch)tree).getRight().getLabel(), 66);
-        assertEquals(tree.countNodes(), 3);
     }
 
     @Test
