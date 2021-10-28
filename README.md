@@ -2,10 +2,9 @@
 
 This exercise is about working with *binary search trees* (BSTs). A binary tree is one in which
 all nodes have at most two children, and a search tree is one in which the label of parent
-nodes is always *less than* the label of the left-hand child, and *greater than* the label of
+nodes is always *greater than* the label of the left-hand child, and *less than* the label of
 the right-hand child (if these children exist). The labels of the nodes can be
-any data for which "less than" and "greater than" makes sense. 
-Refer to the slides from Week 3 for a
+any data for which "less than" and "greater than" makes sense. Refer to the slides from Week 3 for a
 refresher on how trees work and the terminology around them.
 
 Our BST has `int` data in the labels of nodes. The implementation uses *inheritance* and
