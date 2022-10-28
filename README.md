@@ -5,7 +5,7 @@ all nodes have at most two children, and a search tree is one in which the label
 nodes is always *greater than* the label of the left-hand child, and *less than* the label of
 the right-hand child (if these children exist). The labels of the nodes can be
 any data for which "less than" and "greater than" makes sense. Refer to the slides from Week 3 for a
-refresher on how trees work and the terminology around them.
+refresher on how trees work and the surrounding terminology.
 
 Our BST has `int` data in the labels of nodes. The implementation uses *inheritance* and
 *recursion*. In the package `ci583.trees` is the *superclass* of all tree nodes, `BST`. This
@@ -14,7 +14,18 @@ of it in order to construct trees. These subclasses are `Branch` and `Leaf`, the
 of node that make up our trees. `BST` declares the methods that every tree node must 
 implement, but the actual code for the methods goes into the subclasses. This is so that 
 `Branch` and `Leaf` can each provide their own implementation, as it will mean something
-different to, for instance, count the nodes in a branch node than in a leaf.  
+different to, for instance, count the nodes in a branch node than in a leaf. In the `Branch` 
+class the left and right children have the type `Optional<BST>`, as there may or may not be 
+a child in the left or right position. The "traditional" way of representing this in Java
+would be to allow the left or right child nodes in a branch to be either a `BST` or `null`.
+This design requires us to test for null pointers all over the place and at some point we, 
+or someone else who is using our code, is going to forget to do that and get a 
+`NullPointerException`. So the best practice for representing a value of type `T` that may or 
+may not exist is not to use `null` but to use `Optional<T>`, where the `Optional` type is a 
+wrapper around a value or nothing. Whenever we want to access 
+an optional value we need to check whether it really exists: if `left` has the type `Optional<BST>` then
+we can check whether there really is a tree there with `left.isEmpty()` and we can access the 
+tree "inside" the optional using `left.get()`. 
  
  Test  your  work  by running the unit tests  in  the package `ci583.test`. 
          

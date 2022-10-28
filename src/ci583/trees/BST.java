@@ -1,12 +1,13 @@
 package ci583.trees;
 
 import java.io.PrintStream;
+import java.util.Optional;
 
 /*
  * This is an ADT for a Binary Search Tree which contains ints as data.
  */
 public abstract class BST {
-    protected int label;
+    protected final int label;
 
     public BST(int label) {
         this.label = label;
@@ -65,9 +66,10 @@ public abstract class BST {
         return sb.toString();
     }
 
-    public static void traverseNodes(StringBuilder sb, String padding, String pointer, BST node,
+    public static void traverseNodes(StringBuilder sb, String padding, String pointer, Optional<BST> optNode,
                               boolean hasRightSibling) {
-        if (node != null) {
+        if (!optNode.isEmpty()) {
+            BST node = optNode.get();
             sb.append("\n");
             sb.append(padding);
             sb.append(pointer);

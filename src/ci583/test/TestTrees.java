@@ -33,8 +33,8 @@ public class TestTrees {
         assertEquals(tree.countNodes(), 3);
         BST.printTree(System.out, tree);
         assertEquals(tree.getLabel(), 42);
-        assertEquals(((Branch)tree).getLeft().getLabel(), 23);
-        assertEquals(((Branch)tree).getRight().getLabel(), 66);
+        assertEquals(((Branch)tree).getLeft().get().getLabel(), 23);
+        assertEquals(((Branch)tree).getRight().get().getLabel(), 66);
     }
 
     @Test

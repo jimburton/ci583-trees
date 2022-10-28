@@ -1,20 +1,22 @@
 package ci583.trees;
 
+import java.util.Optional;
+
 public class Branch extends BST {
-    private BST left;
-    private BST right;
+    private final Optional<BST> left;
+    private final Optional<BST> right;
 
     public Branch(int label, BST left, BST right) {
         super(label);
-        this.left = left;
-        this.right = right;
+        this.left = Optional.of(left);
+        this.right = Optional.of(right);
     }
 
-    public BST getLeft() {
+    public Optional<BST> getLeft() {
         return left;
     }
 
-    public BST getRight() {
+    public Optional<BST> getRight() {
         return right;
     }
 
