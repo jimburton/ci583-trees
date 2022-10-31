@@ -27,6 +27,11 @@ combining two methods: `map` and `orElse`:
 left.map(t -> t.height()).orElse(0);
 ```
 
+How this works is that `map` takes a lambda argument and applies it to the value inside
+the optional, if one exists. If it doesn't exist, the call to `orElse` returns a value with
+the same type as the result of the lambda. This kind of code is neater and safer than lots of
+`if` statements checking whether values are `null`. 
+
 In the `Branch` class the left and right children have the type `Optional<BST>`, as there 
 may or may not be a child in either position. In the `BST` class two methods altered to now 
 return an `Optional<BST>` or require one as a parameter: `remove` and `merge`. The main challenge
@@ -49,7 +54,8 @@ implement, but the actual code for the methods goes into the subclasses. This is
 `Branch` and `Leaf` can each provide their own implementation, as it will mean something
 different to, for instance, count the nodes in a branch node than in a leaf.
  
- Test  your  work  by running the unit tests  in  the package `ci583.test`. 
+Test  your  work  by running the unit tests  in  the package `ci583.test`. My solutions are in the 
+branch called `optional-children-solution`.
          
 1. Implement the `insert` methods. Note that you have to do this twice, once for 
    branch nodes and once for leaf nodes. Each `insert` method should return a new `BST`. 
@@ -93,11 +99,6 @@ different to, for instance, count the nodes in a branch node than in a leaf.
    ```java
    Optional<BST> newLeft = this.getLeft().map(l -> l.insert(e)).orElse(new Leaf(e));
    ```
-    
-   How this works is that `map` takes a lambda argument and applies it to the value inside
-   the optional, if one exists. If it doesn't exist, the call to `orElse` returns a value with
-   the same type as the result of the lambda. This kind of code is neater and safer than lots of
-   `if` statements checking whether values are `null`.
    
 3. Implement the `search` method -- again, this needs to be done in both the `Leaf` and
   `Branch` classes. The case for the leaf node is simple: if the value you are searching for 
