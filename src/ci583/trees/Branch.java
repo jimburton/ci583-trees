@@ -38,20 +38,20 @@ public class Branch extends BST {
 
     @Override
     public int countNodes() {
-        return 1 + getLeft().map(l -> l.countNodes()).orElse(0)
-                 + getRight().map(r -> r.countNodes()).orElse(0);
+        return 1 + getLeft().map(BST::countNodes).orElse(0)
+                 + getRight().map(BST::countNodes).orElse(0);
     }
 
     @Override
     public int height() {
-        return 1 + Math.max(getLeft().map(l -> l.height()).orElse(0),
-                            getRight().map(r -> r.height()).orElse(0));
+        return 1 + Math.max(getLeft().map(BST::height).orElse(0),
+                            getRight().map(BST::height).orElse(0));
     }
 
     @Override
     public Optional<BST> remove(int e) {
         return ifElseIfElse(e == this.label, e < this.label,
-                getLeft().map(l -> Optional.of(l.merge(getRight()))).orElse(getRight())
+                getLeft().map(l -> l.merge(getRight())).or(this::getRight)
               , Optional.of(new Branch(label, getLeft().map(l -> l.remove(e)).orElse(getLeft()), getRight()))
               , Optional.of(new Branch(label, getLeft(), getRight().map(r -> r.remove(e)).orElse(getRight()))));
     }
@@ -65,8 +65,7 @@ public class Branch extends BST {
             if (t instanceof Branch) {
                 Branch thatBranch = (Branch) t;
                 return ifElseIfElse(thatBranch.label == label, thatBranch.label < label
-                , this.merge(thatBranch.getLeft().map(l -> Optional.of(l.merge(thatBranch.getRight())))
-                                .orElse(thatBranch.getRight().map(r -> Optional.of(r)).orElse(Optional.empty())))
+                , this.merge(thatBranch.getLeft().map(l -> l.merge(thatBranch.getRight())).or(thatBranch::getRight))
                 , new Branch(label, Optional.of(getLeft().map(l -> l.merge(Optional.of(thatBranch))).orElse(thatBranch))
                                 , getRight())
                 , new Branch(label, getLeft(), Optional.of(getRight().map(r -> r.merge(Optional.of(thatBranch)))
@@ -82,8 +81,8 @@ public class Branch extends BST {
 
     @Override
     public String toString() {
-        String l = left.map(lt -> lt.toString() + " ").orElse("");
-        String r = right.map(rt -> " " + rt.toString()).orElse("");
+        String l = left.map(lt -> lt + " ").orElse("");
+        String r = right.map(rt -> " " + rt).orElse("");
         return l + label + r;
     }
 }
