@@ -38,10 +38,10 @@ public abstract class BST {
     /*
      * Return a BST which is the result of removing the element e from the current BST.
      */
-    abstract public BST remove(int e);
+    abstract public Optional<BST> remove(int e);
 
     /* Merge this tree with another */
-    abstract public BST merge(BST that);
+    abstract public BST merge(Optional<BST> that);
 
     /*
     Helper methods for printing trees from https://www.baeldung.com/java-print-binary-tree-diagram
@@ -57,7 +57,7 @@ public abstract class BST {
 
         if (root instanceof Branch) {
             String pointerRight = "└──";
-            String pointerLeft = (((Branch) root).getRight() != null) ? "├──" : "└──";
+            String pointerLeft = (((Branch) root).getRight().isPresent()) ? "├──" : "└──";
 
             traverseNodes(sb, "", pointerLeft, ((Branch) root).getLeft(), ((Branch) root).getRight() != null);
             traverseNodes(sb, "", pointerRight, ((Branch) root).getRight(), false);
@@ -110,14 +110,24 @@ public abstract class BST {
             return false;
         }
         BST that = (BST) o;
+        if ((this instanceof Leaf && !(o instanceof Leaf))
+             || (this instanceof Branch && !(o instanceof Branch))) {
+            return false;
+        }
         if (this.getLabel() != that.getLabel()) {
             return false;
         }
         if (this instanceof Branch && that instanceof Branch) {
-            if (((Branch) this).getLeft() != null && !((Branch) this).getLeft().equals(((Branch) that).getLeft())) {
+            Branch b = (Branch) this;
+            Branch thatBranch = (Branch) that;
+            if (b.getLeft().isPresent()
+                    && thatBranch.getLeft().isPresent()
+                    && !b.getLeft().equals(thatBranch.getLeft())) {
                 return false;
             }
-            if (((Branch) this).getRight() != null && !((Branch) this).getRight().equals(((Branch) that).getRight())) {
+            if (b.getRight().isPresent()
+                    && thatBranch.getRight().isPresent()
+                    && !b.getRight().equals(thatBranch.getRight())) {
                 return false;
             }
         }

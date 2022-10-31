@@ -1,4 +1,4 @@
-# CI583: Binary search trees
+# CI583: Binary search trees with `Optional` children
 
 This exercise is about working with *binary search trees* (BSTs). A binary tree is one in which
 all nodes have at most two children, and a search tree is one in which the label of parent
@@ -14,7 +14,11 @@ of it in order to construct trees. These subclasses are `Branch` and `Leaf`, the
 of node that make up our trees. `BST` declares the methods that every tree node must 
 implement, but the actual code for the methods goes into the subclasses. This is so that 
 `Branch` and `Leaf` can each provide their own implementation, as it will mean something
-different to, for instance, count the nodes in a branch node than in a leaf. In the `Branch` 
+different to, for instance, count the nodes in a branch node than in a leaf. 
+
+In this version of the exercise we are using the 
+[`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
+class to represent values that may or may not be present. In the `Branch` 
 class the left and right children have the type `Optional<BST>`, as there may or may not be 
 a child in the left or right position. The "traditional" way of representing this in Java
 would be to allow the left or right child nodes in a branch to be either a `BST` or `null`.
@@ -25,7 +29,14 @@ may not exist is not to use `null` but to use `Optional<T>`, where the `Optional
 wrapper around a value or nothing. Whenever we want to access 
 an optional value we need to check whether it really exists: if `left` has the type `Optional<BST>` then
 we can check whether there really is a tree there with `left.isEmpty()` and we can access the 
-tree "inside" the optional using `left.get()`. 
+tree "inside" the optional using `left.get()`. We often want to do something with the value inside an 
+optional *or* return a default value. If we have an optional called `left` we can do this by
+combining`map` and `orElse`:
+
+```java
+// return the height of the left child or zero if there is no left child
+left.map(t -> t.height()).orElse(0);
+```
  
  Test  your  work  by running the unit tests  in  the package `ci583.test`. 
          
@@ -36,12 +47,11 @@ tree "inside" the optional using `left.get()`.
       There are no duplicates in our trees -- if the new data is equal to the label of 
      the leaf, just return the current leaf object (`this`). Otherwise, you will need to 
      construct and return a new branch node. If the new
- data to be inserted is greater than the label of the existing leaf, make the new data
- the label of a new branch node and the existing leaf its left-hand child. The 
- right-hand child will be `null`. If the label of the leaf is greater than the new data
- to be inserted, make the label of the current leaf (`this.label`) the label of the new 
- branch and put the inserted data into a new `Leaf` object that will become the left-hand 
- child.
+     data to be inserted is less than the label of the existing leaf, make a Branch node with 
+     the same label as the current node and with a new leaf containing the new data as its left-hand child. The 
+     right-hand child will be `Optional.empty()`. If the new data is greater than the label, make a Branch node
+     with the same label as the current leaf and put the inserted data into a new `Leaf` object that will become 
+     the right-hand child.
   
       Inserting to a branch node is where the recursion comes in. The logic
       is that you need to 
@@ -55,17 +65,23 @@ tree "inside" the optional using `left.get()`.
       - If the new data to be inserted is
       equal to the label of the current branch node, just return `this` (no duplicates).
       - If the new data is less than the label of the current node, 
-      you need to "go left". 
-      If there
+      you need to "go left". If there
       is no left-hand child to follow return a new branch node with the 
       same label as the current one and the same right-hand child, but where the left-hand child
       is replaced with a new leaf node containing the data to be inserted. If there
       *is* a left-hand child to follow, return a new branch node with the same label and
-      right-hand child but where the left-hand child is the tree that results from
-      calling `left.insert(e)`. 
+      right-hand child but where the left-hand child has `e` inserted to it. 
       - If the new data to be inserted is greater than
       the label of the current branch node, you need to "go right", with 
       the same sort of logic as the left-hand case.
+
+      This is where we can make use of the `map ... orElse` pattern. If we want to insert the
+      new data on the left we can do so without needing to check whether the left-hand optional
+      is empty with this code:
+
+    ```java
+    Optional<BST> newLeft = this.getLeft().map(l -> l.insert(e)).orElse(new Leaf(e));
+    ```
    
 2. Implement the `search` method -- again, this needs to be done in both the `Leaf` and
   `Branch` classes. The case for the leaf node is simple -- if the value you are searching for 
@@ -74,11 +90,8 @@ tree "inside" the optional using `left.get()`.
   
       For the branch case, if the value you are searching for is equal to the label, 
       return
-      `true`. If the value is *less than* the label, then you need to go left: here there are two 
-      possibilities: the left-hand child is `null`, so the value is definitely not in the
-        the tree and you should return `false`, or the left-hand child exists. In this case the value might be 
-        down there somewhere, so your method should return the result of calling `left.search(e)`. If the
-        value is *greater than* the label, the logic is the same except you need to go right.
+      `true`. Otherwise, you need to keep searching in either the left or right branch. Use
+      the `map ... orElse` pattern to do that. 
          
 3.  Implement `countNodes` and `height`.  Counting nodes is easy – calling it on a leaf 
   should give 1, and calling it on a branch gives 1 plus the number of nodes in the left-hand
@@ -89,21 +102,28 @@ tree "inside" the optional using `left.get()`.
   left and right branches (if they exist). Use `Math.max` to find the largest of two 
   numbers.
  
-4. Implement `merge`.  When `merge` is called on a leaf node it should first compare
-the label of the tree to be merged with the current label. If the labels are equal 
-then simply return `this`. If the current label is
-greater, return a new branch node with the same label as the current node and
-with the tree to be merged as the left-hand child. If the current label is less than 
-the label of the tree to be merged, make `that` the right-hand child.
+4. Implement `merge`.  When merge is called with an argument that is `null`, just return the current tree. 
+   When `merge` is called on a leaf node it should first compare
+   the label of the tree to be merged with the current label. If the labels are equal 
+   then simply return `this`. If the current label is
+   greater, return a new branch node with the same label as the current node and
+   with the tree to be merged as the left-hand child. If the current label is less than 
+   the label of the tree to be merged, make `that` the right-hand child.
 
-    When `merge` is called on a branch node, you should again begin by comparing the
-labels.  If they are equal, return `this`. If the label of `this` is 
-greater return a new branch node with the same label and right-hand child as `this` but
-where the left-hand child is the tree that results from calling `merge` on 
-`this.left`. If there is no left-hand child, simply supply `that`. If the label of 
-`this` is less than the label of `that`, merge `that`
-with the right-hand child in the same way. Note that this method makes no attempt to keep our 
-trees balanced.
+    When `merge` is called on a branch node, you need to know whether the tree to be merged
+    is a branch or a leaf. Do this using `instanceof`, e.g. `if(that instanceof Leaf)...`. 
+    If the tree to be merged is a leaf node, the case is very similar to the previous one of merging 
+    into a leaf. If not, consider these three cases: 
+
+    + The labels are equal: merge the children of the tree to be merged and merge that new tree with the current one.
+    + The label of `this` is greater: return a new branch node with the same label and right-hand child as `this` but
+   where the left-hand child is the tree that results from calling `merge` on 
+   `this.left`, or if there is no left-hand child in the current tree, simply supply `that`. 
+    + The label of`this` is less than the label of `that`: merge `that`
+   with the right-hand child in the same way. 
+   
+   Note that this method makes no attempt to keep our 
+   trees balanced.
 
 5. Finally, implement `remove`. On branch nodes there are again several possibilities: 
         

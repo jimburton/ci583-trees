@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -24,17 +25,17 @@ public class TestTrees {
     @Test
     public void testInsertAndCountNodes() {
         tree = new Leaf(42);
-        assertEquals(tree.countNodes(), 1);
+        assertEquals(1, tree.countNodes());
         tree = tree.insert(23);
         assertEquals(tree.countNodes(), 2);
         tree = tree.insert(66);
-        assertEquals(tree.countNodes(), 3);
+        assertEquals(3, tree.countNodes());
         tree = tree.insert(66);
-        assertEquals(tree.countNodes(), 3);
+        assertEquals(3, tree.countNodes());
         BST.printTree(System.out, tree);
-        assertEquals(tree.getLabel(), 42);
-        assertEquals(((Branch)tree).getLeft().get().getLabel(), 23);
-        assertEquals(((Branch)tree).getRight().get().getLabel(), 66);
+        assertEquals(42, tree.getLabel());
+        assertEquals(23, ((Branch)tree).getLeft().get().getLabel());
+        assertEquals(66, ((Branch)tree).getRight().get().getLabel());
     }
 
     @Test
@@ -75,7 +76,7 @@ public class TestTrees {
         tree = tree.insert(66);
         tree = tree.insert(11);
         tree = tree.insert(50);
-        assertEquals(tree.height(), 2);
+        assertEquals(2, tree.height());
     }
 
     @Test
@@ -93,9 +94,9 @@ public class TestTrees {
         t2 = t2.insert(33);
         BST.printTree(System.out, tree);
         BST.printTree(System.out, t2);
-        BST.printTree(System.out, tree.merge(t2));
-        assertEquals(tree.merge(t2).toString(), "11 9 19 33 70 101 23 42 50 66");
-        assertEquals(tree.merge(null), tree);
+        BST.printTree(System.out, tree.merge(Optional.of(t2)));
+        assertEquals("11 9 19 33 70 101 23 42 50 66", tree.merge(Optional.of(t2)).toString().trim());
+        assertEquals(tree, tree.merge(null));
     }
 
     @Test
@@ -105,8 +106,8 @@ public class TestTrees {
         tree = tree.insert(66);
         tree = tree.insert(11);
         tree = tree.insert(50);
-        assertEquals(tree, tree.remove(99));// something that isn't there
-        assertEquals(tree.remove(23).toString().trim(), "11 42 50 66");
+        assertEquals(tree.toString().trim(), tree.remove(99).get().toString().trim());// something that isn't there
+        assertEquals("11 42 50 66", tree.remove(23).get().toString().trim());
     }
 
 }
