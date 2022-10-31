@@ -1,8 +1,7 @@
 package ci583.trees;
 
 import java.util.Optional;
-
-import static ci583.Functions.ifElseIfElse;
+import static ci583.trees.BST.ifElseIfElse;
 
 public class Leaf extends BST{
     public Leaf(int label) {

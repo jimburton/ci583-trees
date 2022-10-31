@@ -133,4 +133,14 @@ public abstract class BST {
         }
         return true;
     }
+
+    public static <T> T ifElseIfElse(boolean p, boolean q, T ifP, T ifQ, T elseR) {
+        if(p) {
+            return ifP;
+        } else if(q) {
+            return ifQ;
+        } else {
+            return elseR;
+        }
+    }
 }

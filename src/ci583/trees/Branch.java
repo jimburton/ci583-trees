@@ -1,7 +1,7 @@
 package ci583.trees;
 
 import java.util.Optional;
-import static ci583.Functions.ifElseIfElse;
+import static ci583.trees.BST.ifElseIfElse;
 
 public class Branch extends BST {
     private final Optional<BST> left;
@@ -64,18 +64,13 @@ public class Branch extends BST {
         return that.map(t -> {
             if (t instanceof Branch) {
                 Branch thatBranch = (Branch) t;
-                Optional<BST> acc = Optional.empty();
-                if (thatBranch.label == label) { // try to merge the children of that
-                    acc = thatBranch.getLeft().map(l -> Optional.of(l.merge(thatBranch.getRight())))
-                            .orElse(thatBranch.getRight().map(r -> Optional.of(r)).orElse(Optional.empty()));
-                    return this.merge(acc);
-                } else if (thatBranch.label < label) { //merge into the left child
-                    acc = Optional.of(getLeft().map(l -> l.merge(Optional.of(thatBranch))).orElse(thatBranch));
-                    return new Branch(label, acc, getRight());
-                } else { // merge into the right child
-                    acc = Optional.of(getRight().map(r -> r.merge(Optional.of(thatBranch))).orElse(thatBranch));
-                    return new Branch(label, getLeft(), acc);
-                }
+                return ifElseIfElse(thatBranch.label == label, thatBranch.label < label
+                , this.merge(thatBranch.getLeft().map(l -> Optional.of(l.merge(thatBranch.getRight())))
+                                .orElse(thatBranch.getRight().map(r -> Optional.of(r)).orElse(Optional.empty())))
+                , new Branch(label, Optional.of(getLeft().map(l -> l.merge(Optional.of(thatBranch))).orElse(thatBranch))
+                                , getRight())
+                , new Branch(label, getLeft(), Optional.of(getRight().map(r -> r.merge(Optional.of(thatBranch)))
+                                .orElse(thatBranch))));
             } else { // t is a Leaf
                 return ifElseIfElse(t.label == label, t.label < label
                 , this
