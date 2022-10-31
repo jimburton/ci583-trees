@@ -12,38 +12,27 @@ public class Leaf extends BST{
 
     @Override
     public BST insert(int e) {
-        return ifElseIfElse(e == label, e < label
-        , this
-        , new Branch(label, Optional.of(new Leaf(e)), Optional.empty())
-        , new Branch(label, Optional.empty(), Optional.of(new Leaf(e))));
+        throw new UnsupportedOperationException("Method not implemented");
 
     }
 
     @Override
     public boolean search(int e) {
-        return (e == label);
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
-    public int countNodes() { return 1; }
+    public int countNodes() { throw new UnsupportedOperationException("Method not implemented"); }
 
     @Override
-    public int height() { return 0; }
+    public int height() { throw new UnsupportedOperationException("Method not implemented"); }
 
     @Override
-    public Optional<BST> remove(int e) { return (e == label) ? Optional.empty() : Optional.of(this); }
+    public Optional<BST> remove(int e) { throw new UnsupportedOperationException("Method not implemented"); }
 
     @Override
     public BST merge(Optional<BST> that) {
-        if(that == null) {
-            return this;
-        }
-        return that.map(t ->
-            ifElseIfElse(t.label == label, t.label < label
-            , this
-            , new Branch(label, that, Optional.empty())
-            , new Branch(label, Optional.empty(), that))
-        ).orElse(this);
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override

@@ -24,60 +24,32 @@ public class Branch extends BST {
     // Exercises
     @Override
     public BST insert(int e) {
-        return ifElseIfElse(e == label, e < label
-                , this
-                , new Branch(label, Optional.of(getLeft().map(l -> l.insert(e)).orElse(new Leaf(e))), getRight())
-                , new Branch(label, getLeft(), Optional.of(getRight().map(r -> r.insert(e)).orElse(new Leaf(e)))));
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public boolean search(int e) {
-        return (e == label || getLeft().map(l -> l.search(e)).orElse(false)
-                           || getRight().map(r -> r.search(e)).orElse(false));
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public int countNodes() {
-        return 1 + getLeft().map(l -> l.countNodes()).orElse(0)
-                 + getRight().map(r -> r.countNodes()).orElse(0);
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public int height() {
-        return 1 + Math.max(getLeft().map(l -> l.height()).orElse(0),
-                            getRight().map(r -> r.height()).orElse(0));
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public Optional<BST> remove(int e) {
-        return ifElseIfElse(e == this.label, e < this.label,
-                getLeft().map(l -> Optional.of(l.merge(getRight()))).orElse(getRight())
-              , Optional.of(new Branch(label, getLeft().map(l -> l.remove(e)).orElse(getLeft()), getRight()))
-              , Optional.of(new Branch(label, getLeft(), getRight().map(r -> r.remove(e)).orElse(getRight()))));
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public BST merge(Optional<BST> that) {
-        if(that == null) {
-            return this;
-        }
-        return that.map(t -> {
-            if (t instanceof Branch) {
-                Branch thatBranch = (Branch) t;
-                return ifElseIfElse(thatBranch.label == label, thatBranch.label < label
-                , this.merge(thatBranch.getLeft().map(l -> Optional.of(l.merge(thatBranch.getRight())))
-                                .orElse(thatBranch.getRight().map(r -> Optional.of(r)).orElse(Optional.empty())))
-                , new Branch(label, Optional.of(getLeft().map(l -> l.merge(Optional.of(thatBranch))).orElse(thatBranch))
-                                , getRight())
-                , new Branch(label, getLeft(), Optional.of(getRight().map(r -> r.merge(Optional.of(thatBranch)))
-                                .orElse(thatBranch))));
-            } else { // t is a Leaf
-                return ifElseIfElse(t.label == label, t.label < label
-                , this
-                , new Branch(label, getLeft().map(l -> l.merge(Optional.of(t))), getRight())
-                , new Branch(label, getLeft(), getRight().map(r -> r.merge(Optional.of(t)))));
-            }
-        }).orElse(this);
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override

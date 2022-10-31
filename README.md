@@ -49,7 +49,8 @@ implement, but the actual code for the methods goes into the subclasses. This is
 `Branch` and `Leaf` can each provide their own implementation, as it will mean something
 different to, for instance, count the nodes in a branch node than in a leaf.
  
- Test  your  work  by running the unit tests  in  the package `ci583.test`. 
+Test  your  work  by running the unit tests  in  the package `ci583.test`. My solutions are in the 
+branch called `optional-children-solution`.
          
 1. Implement the `insert` methods. Note that you have to do this twice, once for 
    branch nodes and once for leaf nodes. Each `insert` method should return a new `BST`. 
