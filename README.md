@@ -27,6 +27,11 @@ combining two methods: `map` and `orElse`:
 left.map(t -> t.height()).orElse(0);
 ```
 
+How this works is that `map` takes a lambda argument and applies it to the value inside
+the optional, if one exists. If it doesn't exist, the call to `orElse` returns a value with
+the same type as the result of the lambda. This kind of code is neater and safer than lots of
+`if` statements checking whether values are `null`. 
+
 In the `Branch` class the left and right children have the type `Optional<BST>`, as there 
 may or may not be a child in either position. In the `BST` class two methods altered to now 
 return an `Optional<BST>` or require one as a parameter: `remove` and `merge`. The main challenge
@@ -94,11 +99,6 @@ branch called `optional-children-solution`.
    ```java
    Optional<BST> newLeft = this.getLeft().map(l -> l.insert(e)).orElse(new Leaf(e));
    ```
-    
-   How this works is that `map` takes a lambda argument and applies it to the value inside
-   the optional, if one exists. If it doesn't exist, the call to `orElse` returns a value with
-   the same type as the result of the lambda. This kind of code is neater and safer than lots of
-   `if` statements checking whether values are `null`.
    
 3. Implement the `search` method -- again, this needs to be done in both the `Leaf` and
   `Branch` classes. The case for the leaf node is simple: if the value you are searching for 
