@@ -46,13 +46,7 @@ the optional, if one exists. If it doesn't exist, the call to `orElse` returns a
 the same type as the result of the lambda. This kind of code is neater and safer than lots of
 `if` statements checking whether values are `null`. 
 
-In the `Branch` class the left and right children have the type `Optional<BST>`, as there 
-may or may not be a child in either position. In the `BST` class two methods altered to now 
-return an `Optional<BST>` or require one as a parameter: `remove` and `merge`. The main challenge
-in getting used to programming with optionals is to know whether you are dealing with an optional
-type or the type that goes inside it. 
-
-This exercise is about working with *binary search trees* (BSTs). A binary tree is one in which
+As before, this exercise is about working with *binary search trees* (BSTs). A binary tree is one in which
 all nodes have at most two children, and a search tree is one in which the label of parent
 nodes is always *greater than* the label of the left-hand child, and *less than* the label of
 the right-hand child (if these children exist). The labels of the nodes can be
@@ -67,6 +61,10 @@ of node that make up our trees. `BST` declares the methods that every tree node 
 implement, but the actual code for the methods goes into the subclasses. This is so that 
 `Branch` and `Leaf` can each provide their own implementation, as it will mean something
 different to, for instance, count the nodes in a branch node than in a leaf.
+
+In the `Branch` class the left and right children now have the type `Optional<BST>`, as there 
+may or may not be a child in either position. In the `BST` class two methods are altered to now 
+return an `Optional<BST>` or require one as a parameter: `remove` and `merge`. 
  
 Test  your  work  by running the unit tests  in  the package `ci583.test`. My solutions are in the 
 branch called `optional-children-solution`.
