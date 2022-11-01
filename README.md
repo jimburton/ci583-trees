@@ -57,7 +57,7 @@ If we want to manipulate an optional value rather than just accessing it, *and* 
 value if it doesn't exist, we can do this by combining two methods: `map` and `orElse`:
 
 ```java
-Optional<BST> left = Optional.of(new Leaf(42));
+Optional<BST<Character>> left = Optional.of(new Leaf('*'));
 // return the height of the tree or zero if there isn't one there
 left.map(t -> t.height()).orElse(0);
 ```
