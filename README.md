@@ -9,11 +9,11 @@ To achieve this the definition of the tree classes, `BST`, `Branch` and `Leaf`, 
 *type parameter*. They now look like this:
 
 ```java
-public abstract class BST <T extends Comparable> {
+public abstract class BST <T extends Comparable<T>> {
      // etc..    
-public class Branch<T extends Comparable> extends BST<T> {
+public class Branch<T extends Comparable<T>> extends BST<T> {
      // etc...
-public class Leaf <T extends Comparable> extends BST<T> {
+public class Leaf <T extends Comparable<T>> extends BST<T> {
      // etc
 ```
 Whenever we had a reference to  labels in the previous implementation, the

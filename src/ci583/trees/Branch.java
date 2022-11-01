@@ -3,7 +3,7 @@ package ci583.trees;
 import java.util.Optional;
 import static ci583.trees.BST.ifElseIfElse;
 
-public class Branch<T extends Comparable> extends BST<T> {
+public class Branch<T extends Comparable<T>> extends BST<T> {
     private final Optional<BST<T>> left;
     private final Optional<BST<T>> right;
 

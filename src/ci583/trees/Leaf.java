@@ -3,7 +3,7 @@ package ci583.trees;
 import java.util.Optional;
 import static ci583.trees.BST.ifElseIfElse;
 
-public class Leaf <T extends Comparable> extends BST<T> {
+public class Leaf <T extends Comparable<T>> extends BST<T> {
     public Leaf(T label) {
         super(label);
     }
