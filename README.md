@@ -37,10 +37,9 @@ or someone else who is using our code, is going to forget to do that and get a
 `NullPointerException`. The best practice for representing a value of type `T` that may or
 may not exist is not to use `null` but to use `Optional<T>`, where the `Optional` type is a
 wrapper around a value of type `T` or nothing. We can put a value, `t`, "inside" an optional 
-using `Optional.of(t)`, so long as `t` has the right type.  We can access that value 
-"inside" the optional using `left.get()`. However, when we want to access an optional value we need to check 
-whether it really exists: if `left` has the type `Optional<BST<T>>` then
-we can check whether there really is a tree there with `left.isEmpty()` and `left.isPresent()`. 
+using `myOpt = Optional.of(t)`, so long as `t` has the right type.  We can access that value 
+"inside" the optional using `myOpt.get()`. However, when we want to access an optional value we need to check 
+whether it really exists: for this we can use `myOpt.isEmpty()` and `myOpt.isPresent()`. 
 
 We often want to do something with the value inside 
 an optional *or* use a default value. If we just want to *access* the value or use a default we
@@ -54,7 +53,7 @@ System.out.println(opt1.or("Howdy")); // prints "Hello world!"
 System.out.println(opt2.or("Howdy")); // prints "Howdy"
 ```
 
-If we want to manipulate an optional value or do something else with it, *and* use a default
+If we want to manipulate an optional value rather than just accessing it, *and* use a default
 value if it doesn't exist, we can do this by combining two methods: `map` and `orElse`:
 
 ```java
@@ -68,9 +67,9 @@ the optional, if one exists. If it doesn't exist, the call to `orElse` returns a
 the same type as the result of the lambda. This kind of code is neater and safer than lots of
 `if` statements checking whether values are `null`. 
 
-Start by reading the new versions of the `BST`, `Branch` and `Leaf` classes. Note th use of the 
+Start by reading the new versions of the `BST`, `Branch` and `Leaf` classes. Note the use of the 
 generic type `T`. In the `Branch` class the left and right children have the type `Optional<BST<T>>`, 
-as there may or may not be a child in either position. In the `BST` class two methods altered to 
+as there may or may not be a child in either position. In the `BST` class two methods are altered to 
 now return an `Optional<BST<T>>` or require one as a parameter: `remove` and `merge`.
  
 Test  your  work  by running the unit tests  in  the package `ci583.test`. My solutions are in the 
