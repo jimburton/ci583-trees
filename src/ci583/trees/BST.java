@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.util.Optional;
 
 /*
- * This is an ADT for a Binary Search Tree which contains ints as data.
+ * This is an ADT for a Binary Search Tree which contains values of the comparable type T as data.
  */
 public abstract class BST <T extends Comparable> {
     protected final T label;
