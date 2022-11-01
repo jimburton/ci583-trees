@@ -3,37 +3,37 @@ package ci583.trees;
 import java.util.Optional;
 import static ci583.trees.BST.ifElseIfElse;
 
-public class Branch extends BST {
-    private final Optional<BST> left;
-    private final Optional<BST> right;
+public class Branch<T extends Comparable> extends BST<T> {
+    private final Optional<BST<T>> left;
+    private final Optional<BST<T>> right;
 
-    public Branch(int label, Optional<BST> left, Optional<BST> right) {
+    public Branch(T label, Optional<BST<T>> left, Optional<BST<T>> right) {
         super(label);
         this.left = left;
         this.right = right;
     }
 
-    public Optional<BST> getLeft() {
+    public Optional<BST<T>> getLeft() {
         return left;
     }
 
-    public Optional<BST> getRight() {
+    public Optional<BST<T>> getRight() {
         return right;
     }
 
     // Exercises
     @Override
-    public BST insert(int e) {
-        return ifElseIfElse(e == label, e < label
+    public BST<T> insert(T e) {
+        return ifElseIfElse(e.equals(label), lt(e, label)
                 , this
                 , new Branch(label, Optional.of(getLeft().map(l -> l.insert(e)).orElse(new Leaf(e))), getRight())
                 , new Branch(label, getLeft(), Optional.of(getRight().map(r -> r.insert(e)).orElse(new Leaf(e)))));
     }
 
     @Override
-    public boolean search(int e) {
-        return (e == label || getLeft().map(l -> l.search(e)).orElse(false)
-                           || getRight().map(r -> r.search(e)).orElse(false));
+    public boolean search(T e) {
+        return (e.equals(label) || getLeft().map(l -> l.search(e)).orElse(false)
+                             || getRight().map(r -> r.search(e)).orElse(false));
     }
 
     @Override
@@ -49,32 +49,33 @@ public class Branch extends BST {
     }
 
     @Override
-    public Optional<BST> remove(int e) {
-        return ifElseIfElse(e == this.label, e < this.label,
+    public Optional<BST<T>> remove(T e) {
+        return ifElseIfElse(e.equals(this.label), lt(e, this.label),
                 getLeft().map(l -> l.merge(getRight())).or(this::getRight)
               , Optional.of(new Branch(label, getLeft().map(l -> l.remove(e)).orElse(getLeft()), getRight()))
               , Optional.of(new Branch(label, getLeft(), getRight().map(r -> r.remove(e)).orElse(getRight()))));
     }
 
     @Override
-    public BST merge(Optional<BST> that) {
+    public BST<T> merge(Optional<BST<T>> that) {
         if(that == null) {
             return this;
         }
         return that.map(t -> {
             if (t instanceof Branch) {
-                Branch thatBranch = (Branch) t;
-                return ifElseIfElse(thatBranch.label == label, thatBranch.label < label
+                Branch<T> thatBranch = (Branch<T>) t;
+                return ifElseIfElse(thatBranch.label.equals(label), lt(thatBranch.label, label)
                 , this.merge(thatBranch.getLeft().map(l -> l.merge(thatBranch.getRight())).or(thatBranch::getRight))
-                , new Branch(label, Optional.of(getLeft().map(l -> l.merge(Optional.of(thatBranch))).orElse(thatBranch))
+                , new Branch<T>(label, Optional.of(getLeft().map(l -> l.merge(Optional.of(thatBranch))).orElse(thatBranch))
                                 , getRight())
-                , new Branch(label, getLeft(), Optional.of(getRight().map(r -> r.merge(Optional.of(thatBranch)))
+                , new Branch<T>(label, getLeft(), Optional.of(getRight().map(r -> r.merge(Optional.of(thatBranch)))
                                 .orElse(thatBranch))));
             } else { // t is a Leaf
-                return ifElseIfElse(t.label == label, t.label < label
+                Leaf<T> thatLeaf = (Leaf<T>) t;
+                return ifElseIfElse(thatLeaf.label.equals(label), lt(thatLeaf.label, label)
                 , this
-                , new Branch(label, getLeft().map(l -> l.merge(Optional.of(t))), getRight())
-                , new Branch(label, getLeft(), getRight().map(r -> r.merge(Optional.of(t)))));
+                , new Branch<T>(label, getLeft().map(l -> l.merge(Optional.of(t))), getRight())
+                , new Branch<T>(label, getLeft(), getRight().map(r -> r.merge(Optional.of(t)))));
             }
         }).orElse(this);
     }

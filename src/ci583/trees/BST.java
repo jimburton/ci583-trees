@@ -6,15 +6,15 @@ import java.util.Optional;
 /*
  * This is an ADT for a Binary Search Tree which contains ints as data.
  */
-public abstract class BST {
-    protected final int label;
+public abstract class BST <T extends Comparable> {
+    protected final T label;
 
-    public BST(int label) {
+    public BST(T label) {
         this.label = label;
     }
 
     /* Getter for the label */
-    public int getLabel() {
+    public T getLabel() {
         return label;
     }
 
@@ -22,11 +22,11 @@ public abstract class BST {
      * Return a new BST which is the result of inserting the element e to the current BST.
      * You need to maintain the BST conditions by inserting the element at the right location.
      */
-    abstract public BST insert(int e);
+    abstract public BST<T> insert(T e);
     /*
     Find an element in the tree -- return true if it is found, false otherwise
      */
-    abstract public boolean search(int e);
+    abstract public boolean search(T e);
     /*
      * Return the number of nodes in the BST.
      */
@@ -38,10 +38,10 @@ public abstract class BST {
     /*
      * Return a BST which is the result of removing the element e from the current BST.
      */
-    abstract public Optional<BST> remove(int e);
+    abstract public Optional<BST<T>> remove(T e);
 
     /* Merge this tree with another */
-    abstract public BST merge(Optional<BST> that);
+    abstract public BST<T> merge(Optional<BST<T>> that);
 
     /*
     Helper methods for printing trees from https://www.baeldung.com/java-print-binary-tree-diagram
@@ -142,5 +142,15 @@ public abstract class BST {
         } else {
             return elseR;
         }
+    }
+
+    /**
+     * Convenience method for comparing two comparable objects.
+     * @param o1
+     * @param o2
+     * @return true if o1 is less than o2.
+     */
+    public boolean lt(T o1, T o2) {
+        return o1.compareTo(o2) < 0;
     }
 }

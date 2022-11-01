@@ -3,16 +3,16 @@ package ci583.trees;
 import java.util.Optional;
 import static ci583.trees.BST.ifElseIfElse;
 
-public class Leaf extends BST{
-    public Leaf(int label) {
+public class Leaf <T extends Comparable> extends BST<T> {
+    public Leaf(T label) {
         super(label);
     }
 
     // Exercises
 
     @Override
-    public BST insert(int e) {
-        return ifElseIfElse(e == label, e < label
+    public BST<T> insert(T e) {
+        return ifElseIfElse(e.equals(label), lt(e, label)
         , this
         , new Branch(label, Optional.of(new Leaf(e)), Optional.empty())
         , new Branch(label, Optional.empty(), Optional.of(new Leaf(e))));
@@ -20,8 +20,8 @@ public class Leaf extends BST{
     }
 
     @Override
-    public boolean search(int e) {
-        return (e == label);
+    public boolean search(T e) {
+        return e.equals(label);
     }
 
     @Override
@@ -31,18 +31,18 @@ public class Leaf extends BST{
     public int height() { return 0; }
 
     @Override
-    public Optional<BST> remove(int e) { return (e == label) ? Optional.empty() : Optional.of(this); }
+    public Optional<BST<T>> remove(T e) { return e.equals(label) ? Optional.empty() : Optional.of(this); }
 
     @Override
-    public BST merge(Optional<BST> that) {
+    public BST<T> merge(Optional<BST<T>> that) {
         if(that == null) {
             return this;
         }
         return that.map(t ->
-            ifElseIfElse(t.label == label, t.label < label
+            ifElseIfElse(t.label.equals(label), lt(t.label, label)
             , this
-            , new Branch(label, that, Optional.empty())
-            , new Branch(label, Optional.empty(), that))
+            , new Branch<T>(label, that, Optional.empty())
+            , new Branch<T>(label, Optional.empty(), that))
         ).orElse(this);
     }
 

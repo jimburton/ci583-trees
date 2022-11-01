@@ -1,8 +1,15 @@
 # CI583: Binary search trees with `Optional` children
 
 This exercise revisits a problem you've already attempted, in week 3. It is about programming 
-recursively with binary search trees. The difference is that this implementation uses the
-[`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
+recursively with binary search trees. The first difference is that this implementation uses Java
+generics to make a tree that can hold any kind of comparable data in its nodes. Instead of constructing
+a tree with the type `BST` that can only hold `int` data, we construct one of type `BST<T>` where
+`T` is any class that extends `Comparable`. The `Comparable` class is the class that implements the 
+`compareTo` method, allowing us to order its values, saying that one is *less than*, *equal to* or 
+*greater than* another.  
+
+Secondly, it
+uses the [`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
 class to represent values that may or may not be present. In this original exercise there were 
 many places where you as the programmer had to return `null` from a method or write a lot of checks
 to see whether a tree you were trying to do something with was in fact `null`. This was necessary 

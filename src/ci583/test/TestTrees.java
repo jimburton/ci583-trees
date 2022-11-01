@@ -15,7 +15,8 @@ import static org.junit.Assert.*;
 
 public class TestTrees {
 
-    BST tree;
+    BST<Integer> intTree;
+    BST<String> strTree;
 
     @Before
     public void setUp() {
@@ -24,34 +25,49 @@ public class TestTrees {
 
     @Test
     public void testInsertAndCountNodes() {
-        tree = new Leaf(42);
-        assertEquals(1, tree.countNodes());
-        tree = tree.insert(23);
-        assertEquals(tree.countNodes(), 2);
-        tree = tree.insert(66);
-        assertEquals(3, tree.countNodes());
-        tree = tree.insert(66);
-        assertEquals(3, tree.countNodes());
-        BST.printTree(System.out, tree);
-        assertEquals(42, tree.getLabel());
-        assertEquals(23, ((Branch)tree).getLeft().get().getLabel());
-        assertEquals(66, ((Branch)tree).getRight().get().getLabel());
+        intTree = new Leaf<>(42);
+        assertEquals(1, intTree.countNodes());
+        intTree = intTree.insert(23);
+        assertEquals(intTree.countNodes(), 2);
+        intTree = intTree.insert(66);
+        assertEquals(3, intTree.countNodes());
+        intTree = intTree.insert(66);
+        assertEquals(3, intTree.countNodes());
+        BST.printTree(System.out, intTree);
+        assertEquals(Integer.valueOf(42), intTree.getLabel());
+        Branch<Integer> b = (Branch<Integer>) intTree;
+        assertEquals(Integer.valueOf(23), b.getLeft().get().getLabel());
+        assertEquals(Integer.valueOf(66), b.getRight().get().getLabel());
+    }
+
+    @Test
+    public void testInsertAndCountStrNodes() {
+        strTree = new Leaf<>("j");
+        String str = "ajkhgjvbcn,jnelky";
+        for(int i=0;i<str.length();i++) {
+            strTree = strTree.insert(str.charAt(i)+"");
+        }
+        BST.printTree(System.out, strTree);
+        assertEquals("j", strTree.getLabel());
+        assertEquals(13, strTree.countNodes()); // unique chars in str
+        assertTrue(strTree.search("k"));
+        assertFalse(strTree.search("#"));
     }
 
     @Test
     public void testSearch() {
-        tree = new Leaf(42);
-        tree = tree.insert(23);
-        tree = tree.insert(66);
-        assertTrue(tree.search(42));
-        assertTrue(tree.search(23));
-        assertTrue(tree.search(66));
-        assertFalse(tree.search(0));
+        intTree = new Leaf<>(42);
+        intTree = intTree.insert(23);
+        intTree = intTree.insert(66);
+        assertTrue(intTree.search(42));
+        assertTrue(intTree.search(23));
+        assertTrue(intTree.search(66));
+        assertFalse(intTree.search(0));
     }
 
     @Test
     public void testInsertAndSearch() {
-        tree = new Leaf(42);
+        intTree = new Leaf<>(42);
         Random random = new Random();
         int min = -1000;
         int max = 1000;
@@ -61,53 +77,53 @@ public class TestTrees {
         }
 
         for(int i: rInts) {
-            tree = tree.insert(i);
+            intTree = intTree.insert(i);
         }
-        BST.printTree(System.out, tree);
+        BST.printTree(System.out, intTree);
         for(int i: rInts) {
-            assertTrue(tree.search(i));
+            assertTrue(intTree.search(i));
         }
     }
 
     @Test
     public void testInsertAndHeight() {
-        tree = new Leaf(42);
-        tree = tree.insert(23);
-        tree = tree.insert(66);
-        tree = tree.insert(11);
-        tree = tree.insert(50);
-        assertEquals(2, tree.height());
+        intTree = new Leaf<>(42);
+        intTree = intTree.insert(23);
+        intTree = intTree.insert(66);
+        intTree = intTree.insert(11);
+        intTree = intTree.insert(50);
+        assertEquals(2, intTree.height());
     }
 
     @Test
     public void testMerge() {
-        tree = new Leaf(42);
-        tree = tree.insert(23);
-        tree = tree.insert(66);
-        tree = tree.insert(11);
-        tree = tree.insert(50);
+        intTree = new Leaf<>(42);
+        intTree = intTree.insert(23);
+        intTree = intTree.insert(66);
+        intTree = intTree.insert(11);
+        intTree = intTree.insert(50);
 
-        BST t2 = new Leaf(19);
+        BST t2 = new Leaf<>(19);
         t2 = t2.insert(9);
         t2 = t2.insert(101);
         t2 = t2.insert(70);
         t2 = t2.insert(33);
-        BST.printTree(System.out, tree);
+        BST.printTree(System.out, intTree);
         BST.printTree(System.out, t2);
-        BST.printTree(System.out, tree.merge(Optional.of(t2)));
-        assertEquals("11 9 19 33 70 101 23 42 50 66", tree.merge(Optional.of(t2)).toString().trim());
-        assertEquals(tree, tree.merge(null));
+        BST.printTree(System.out, intTree.merge(Optional.of(t2)));
+        assertEquals("11 9 19 33 70 101 23 42 50 66", intTree.merge(Optional.of(t2)).toString().trim());
+        assertEquals(intTree, intTree.merge(null));
     }
 
     @Test
     public void testRemove() {
-        tree = new Leaf(42);
-        tree = tree.insert(23);
-        tree = tree.insert(66);
-        tree = tree.insert(11);
-        tree = tree.insert(50);
-        assertEquals(tree.toString().trim(), tree.remove(99).get().toString().trim());// something that isn't there
-        assertEquals("11 42 50 66", tree.remove(23).get().toString().trim());
+        intTree = new Leaf<>(42);
+        intTree = intTree.insert(23);
+        intTree = intTree.insert(66);
+        intTree = intTree.insert(11);
+        intTree = intTree.insert(50);
+        assertEquals(intTree.toString().trim(), intTree.remove(99).get().toString().trim());// something that isn't there
+        assertEquals("11 42 50 66", intTree.remove(23).get().toString().trim());
     }
 
 }
