@@ -6,7 +6,7 @@ import java.util.Optional;
 /*
  * This is an ADT for a Binary Search Tree which contains ints as data.
  */
-public abstract class BST <T extends Comparable> {
+public abstract class BST <T extends Comparable<T>> {
     protected final T label;
 
     public BST(T label) {
@@ -68,7 +68,7 @@ public abstract class BST <T extends Comparable> {
 
     public static void traverseNodes(StringBuilder sb, String padding, String pointer, Optional<BST> optNode,
                               boolean hasRightSibling) {
-        if (!optNode.isEmpty()) {
+        if (optNode.isPresent()) {
             BST node = optNode.get();
             sb.append("\n");
             sb.append(padding);
@@ -109,7 +109,7 @@ public abstract class BST <T extends Comparable> {
         if (!(o instanceof BST)) {
             return false;
         }
-        BST that = (BST) o;
+        BST<T> that = (BST<T>) o;
         if ((this instanceof Leaf && !(o instanceof Leaf))
              || (this instanceof Branch && !(o instanceof Branch))) {
             return false;
@@ -117,19 +117,17 @@ public abstract class BST <T extends Comparable> {
         if (this.getLabel() != that.getLabel()) {
             return false;
         }
-        if (this instanceof Branch && that instanceof Branch) {
-            Branch b = (Branch) this;
-            Branch thatBranch = (Branch) that;
+        if (this instanceof Branch) {
+            Branch<T> b = (Branch<T>) this;
+            Branch<T> thatBranch = (Branch<T>) that;
             if (b.getLeft().isPresent()
                     && thatBranch.getLeft().isPresent()
                     && !b.getLeft().equals(thatBranch.getLeft())) {
                 return false;
             }
-            if (b.getRight().isPresent()
-                    && thatBranch.getRight().isPresent()
-                    && !b.getRight().equals(thatBranch.getRight())) {
-                return false;
-            }
+            return b.getRight().isEmpty()
+                    || thatBranch.getRight().isEmpty()
+                    || b.getRight().equals(thatBranch.getRight());
         }
         return true;
     }
@@ -146,8 +144,8 @@ public abstract class BST <T extends Comparable> {
 
     /**
      * Convenience method for comparing two comparable objects.
-     * @param o1
-     * @param o2
+     * @param o1 first object
+     * @param o2 second object
      * @return true if o1 is less than o2.
      */
     public boolean lt(T o1, T o2) {
