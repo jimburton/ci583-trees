@@ -109,7 +109,7 @@ public abstract class BST <T extends Comparable> {
         if (!(o instanceof BST)) {
             return false;
         }
-        BST that = (BST) o;
+        BST<T> that = (BST<T>) o;
         if ((this instanceof Leaf && !(o instanceof Leaf))
              || (this instanceof Branch && !(o instanceof Branch))) {
             return false;

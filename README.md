@@ -1,15 +1,30 @@
 # CI583: Binary search trees with `Optional` children
 
-This exercise revisits a problem you've already attempted, in week 3. It is about programming 
-recursively with binary search trees. The first difference is that this implementation uses Java
-generics to make a tree that can hold any kind of comparable data in its nodes. Instead of constructing
-a tree with the type `BST` that can only hold `int` data, we construct one of type `BST<T>` where
-`T` is any class that extends `Comparable`. The `Comparable` class is the class that implements the 
-`compareTo` method, allowing us to order its values, saying that one is *less than*, *equal to* or 
-*greater than* another.  
+This exercise revisits a problem you've (hopefully) already attempted. It is about programming 
+recursively with binary search trees, but the implementation is improved in various ways. The 
+first difference is that this implementation uses Java *generics* to make a tree that can hold any 
+kind of comparable data in its nodes. Instead of constructing a tree with the type `BST` that can 
+only hold `int` data, we construct one of type `BST<T>` where `T` is any class that extends `Comparable`. 
+To achieve this the definition of the tree classes, `BST`, `Branch` and `Leaf`, are changed to include a 
+*type parameter*. They now look like this:
 
-Secondly, it
-uses the [`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
+```java
+public abstract class BST <T extends Comparable> {
+     // etc..    
+public class Branch<T extends Comparable> extends BST<T> {
+     // etc...
+public class Leaf <T extends Comparable> extends BST<T> {
+     // etc
+```
+Whenever we had a reference to  labels in the previous implementation, the
+type of the labels is changed to `T`. The `Comparable` class is the class that implements the 
+`compareTo` method, allowing us to order its values, saying that one is *less than*, *equal to* or 
+*greater than* another. Almost all standard classes in Java extend `Comparable`. Now when we want to 
+compare labels, we need to use the `equals` and `compareTo` methods instead of `==`, `<` and `>`. Calling 
+`o1.compareTo(o2)` returns 0 if `o1` and `o2` are equal, less than 0 if `o1` is less than `o2` and more 
+than 0 if `o1` is greater than `o2`.
+
+Secondly, this implementation uses the [`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
 class to represent values that may or may not be present. In this original exercise there were 
 many places where you as the programmer had to return `null` from a method or write a lot of checks
 to see whether a tree you were trying to do something with was in fact `null`. This was necessary 
@@ -22,7 +37,7 @@ or someone else who is using our code, is going to forget to do that and get a
 `NullPointerException`. The best practice for representing a value of type `T` that may or
 may not exist is not to use `null` but to use `Optional<T>`, where the `Optional` type is a
 wrapper around a value or nothing. Whenever we want to access an optional value we need to check 
-whether it really exists: if `left` has the type `Optional<BST>` then
+whether it really exists: if `left` has the type `Optional<BST<T>>` then
 we can check whether there really is a tree there with `left.isEmpty()` and `left.isPresent()`.
 We can put a value, `v`, "inside" an optional using `Optional.of(v)`.  We can access that value 
 "inside" the optional using `left.get()`. We often want to do something with the value inside 
@@ -39,27 +54,10 @@ the optional, if one exists. If it doesn't exist, the call to `orElse` returns a
 the same type as the result of the lambda. This kind of code is neater and safer than lots of
 `if` statements checking whether values are `null`. 
 
-In the `Branch` class the left and right children have the type `Optional<BST>`, as there 
-may or may not be a child in either position. In the `BST` class two methods altered to now 
-return an `Optional<BST>` or require one as a parameter: `remove` and `merge`. The main challenge
-in getting used to programming with optionals is to know whether you are dealing with an optional
-type or the type that goes inside it. 
-
-This exercise is about working with *binary search trees* (BSTs). A binary tree is one in which
-all nodes have at most two children, and a search tree is one in which the label of parent
-nodes is always *greater than* the label of the left-hand child, and *less than* the label of
-the right-hand child (if these children exist). The labels of the nodes can be
-any data for which "less than" and "greater than" makes sense. Refer to the slides from Week 3 for a
-refresher on how trees work and the surrounding terminology.
-
-Our BST has `int` data in the labels of nodes. The implementation uses *inheritance* and
-*recursion*. In the package `ci583.trees` is the *superclass* of all tree nodes, `BST`. This
-class is defined as an `abstract` class, which means that we will have to make *subclasses*
-of it in order to construct trees. These subclasses are `Branch` and `Leaf`, the two types
-of node that make up our trees. `BST` declares the methods that every tree node must 
-implement, but the actual code for the methods goes into the subclasses. This is so that 
-`Branch` and `Leaf` can each provide their own implementation, as it will mean something
-different to, for instance, count the nodes in a branch node than in a leaf.
+Start by reading the new versions of the `BST`, `Branch` and `Leaf` classes. Note th use of the 
+generic type `T`. In the `Branch` class the left and right children have the type `Optional<BST<T>>`, 
+as there may or may not be a child in either position. In the `BST` class two methods altered to 
+now return an `Optional<BST<T>>` or require one as a parameter: `remove` and `merge`.
  
 Test  your  work  by running the unit tests  in  the package `ci583.test`. My solutions are in the 
 branch called `optional-children-solution`.
@@ -74,7 +72,7 @@ branch called `optional-children-solution`.
    data to be inserted is less than the label of the existing leaf, make a Branch node with 
    the same label as the current node and with a new leaf containing the new data as its left-hand child. The 
    right-hand child will be `Optional.empty()`. If the new data is greater than the label, make a Branch node
-   with the same label as the current leaf and put the inserted data into a new `Leaf` object that will become 
+   with the same label as the current leaf and put the inserted data into a new `Leaf<T>` object that will become 
    the right-hand child.
   
    Inserting to a branch node is where the recursion comes in. The logic
@@ -104,7 +102,7 @@ branch called `optional-children-solution`.
    is empty with this code:
 
    ```java
-   Optional<BST> newLeft = this.getLeft().map(l -> l.insert(e)).orElse(new Leaf(e));
+   Optional<BST<T>> newLeft = this.getLeft().map(l -> l.insert(e)).orElse(new Leaf<T>(e));
    ```
    
 3. Implement the `search` method -- again, this needs to be done in both the `Leaf` and
