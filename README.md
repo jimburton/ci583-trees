@@ -1,4 +1,4 @@
-# CI583: Binary search trees with `Optional` children
+# CI583: Generic binary search trees with `Optional` children
 
 This exercise revisits a problem you've (hopefully) already attempted. It is about programming 
 recursively with binary search trees, but the implementation is improved in various ways. The 
