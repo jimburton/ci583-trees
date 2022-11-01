@@ -1,6 +1,6 @@
 # CI583: Binary search trees with `Optional` children
 
-This exercise revisits a problem you've already attempted, in week 3. It is about programming 
+This exercise revisits a problem you've (probably) already attempted. It is about programming 
 recursively with binary search trees. The difference is that this implementation uses the
 [`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
 class to represent values that may or may not be present. In this original exercise there were 
@@ -14,16 +14,30 @@ This design requires us to test for null pointers all over the place and at some
 or someone else who is using our code, is going to forget to do that and get a
 `NullPointerException`. The best practice for representing a value of type `T` that may or
 may not exist is not to use `null` but to use `Optional<T>`, where the `Optional` type is a
-wrapper around a value or nothing. Whenever we want to access an optional value we need to check 
+wrapper around a value of type `T` or nothing. We can put a value, `t`, "inside" an optional 
+using `Optional.of(t)`, so long as `t` has the right type.  We can access that value 
+"inside" the optional using `left.get()`. However, when we want to access an optional value we need to check 
 whether it really exists: if `left` has the type `Optional<BST>` then
-we can check whether there really is a tree there with `left.isEmpty()` and `left.isPresent()`.
-We can put a value, `v`, "inside" an optional using `Optional.of(v)`.  We can access that value 
-"inside" the optional using `left.get()`. We often want to do something with the value inside 
-an optional *or* return a default value. If we have an optional called `left` we can do this by 
-combining two methods: `map` and `orElse`:
+we can check whether there really is a tree there with `left.isEmpty()` and `left.isPresent()`. 
+
+We often want to do something with the value inside 
+an optional *or* use a default value. If we just want to *access* the value or use a default we
+can use the `or` method:
 
 ```java
-// return the height of the left child or zero if there is no left child
+Optional<String> opt1 = Optional.of("Hello world!");
+Optional<String> opt2 = Optional.empty();
+
+System.out.println(opt1.or("Howdy")); // prints "Hello world!"
+System.out.println(opt2.or("Howdy")); // prints "Howdy"
+```
+
+If we want to manipulate an optional value or do something else with it, *and* use a default
+value if it doesn't exist, we can do this by combining two methods: `map` and `orElse`:
+
+```java
+Optional<BST> left = Optional.of(new Leaf(42));
+// return the height of the tree or zero if there isn't one there
 left.map(t -> t.height()).orElse(0);
 ```
 
