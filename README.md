@@ -128,7 +128,8 @@ branch called `optional-children-solution`.
    For the branch case, if the value you are searching for is equal to the label, 
    return
    `true`. Otherwise, you need to keep searching in either the left or right branch. Use
-   the `map ... orElse` pattern to do that. 
+   the `map ... orElse` pattern to make a recursive call to search if there *is* a child 
+   to search in, or return false if not. 
          
 4. Implement `countNodes` and `height`.  Counting nodes is easy – calling it on a leaf 
    should give 1, and calling it on a branch gives 1 plus the number of nodes in the left-hand
