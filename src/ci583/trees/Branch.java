@@ -32,8 +32,10 @@ public class Branch<T extends Comparable<T>> extends BST<T> {
 
     @Override
     public boolean search(T e) {
-        return (e.equals(label) || getLeft().map(l -> l.search(e)).orElse(false)
-                             || getRight().map(r -> r.search(e)).orElse(false));
+        return ifElseIfElse(e.equals(label), lt(e, label)
+                , true
+                , getLeft().map(l -> l.search(e)).orElse(false)
+                , getRight().map(r -> r.search(e)).orElse(false));
     }
 
     @Override
