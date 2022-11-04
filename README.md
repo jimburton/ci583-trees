@@ -25,21 +25,21 @@ compare labels, we need to use the `equals` and `compareTo` methods instead of `
 than 0 if `o1` is greater than `o2`.
 
 Secondly, this implementation uses the [`Optional`](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
-class to represent values that may or may not be present. In this original exercise there were 
+class to represent values that may or may not be present. In the original exercise there were 
 many places where you as the programmer had to return `null` from a method or write a lot of checks
 to see whether a tree you were trying to do something with was in fact `null`. This was necessary 
 because there are some cases where there really is no meaningful value you can return. Consider the 
-case of removing a node from a tree and returning the result tree -- if the original tree has only 
-one node in it, what should you return? In the previous exercise, the answer was `null`.
+case of removing a node from a tree and returning the result tree -- if the original tree consists 
+of one leaf node, what should you return? In the previous exercise, the answer was `null`.
 
-This design requires us to test for null pointers all over the place and at some point we,
+That design requires us to test for null pointers all over the place and at some point we,
 or someone else who is using our code, is going to forget to do that and get a
 `NullPointerException`. The best practice for representing a value of type `T` that may or
 may not exist is not to use `null` but to use `Optional<T>`, where the `Optional` type is a
-wrapper around a value of type `T` or nothing. We can put a value, `t`, "inside" an optional 
-using `myOpt = Optional.of(t)`, so long as `t` has the right type.  We can access that value 
-"inside" the optional using `myOpt.get()`. However, when we want to access an optional value we need to check 
-whether it really exists: for this we can use `myOpt.isEmpty()` and `myOpt.isPresent()`. 
+wrapper around a value of type `T` or nothing. We can put a value, `x`, "inside" an optional 
+using `myOpt = Optional.of(x)`, so long as `x` has the right type.  We can access that value 
+"inside" the optional using `myOpt.get()`. However, when we want to access an optional value we 
+should check whether it really exists: for this we can use `myOpt.isEmpty()` and `myOpt.isPresent()`. 
 
 We often want to do something with the value inside 
 an optional *or* use a default value. If we just want to *access* the value or use a default we
@@ -57,9 +57,11 @@ If we want to manipulate an optional value rather than just accessing it, *and* 
 value if it doesn't exist, we can do this by combining two methods: `map` and `orElse`:
 
 ```java
-Optional<BST<Character>> left = Optional.of(new Leaf('*'));
-// return the height of the tree or zero if there isn't one there
-left.map(t -> t.height()).orElse(0);
+Optional<BST<Character>> t1 = Optional.of(new Leaf('*'));
+Optional<BST<Integer>> t2 = Optional.empty();
+// count the nodes in the tree or zero if there isn't one there
+System.out.println(t1.map(t -> t.countNodes()).orElse(0)); // prints 1
+System.out.println(t2.map(t -> t.countNodes()).orElse(0)); // prints 0
 ```
 
 How this works is that `map` takes a lambda argument and applies it to the value inside
@@ -101,7 +103,7 @@ branch called `optional-children-solution`.
      equal to the label of the current branch node, just return `this` (no duplicates).
    - If the new data is less than the label of the current node, 
      you need to "go left". If there
-     is no left-hand child to follow return a new branch node with the 
+     is no left-hand child to follow (`left.isEmpty()` is true), return a new branch node with the 
      same label as the current one and the same right-hand child, but where the left-hand child
      is replaced with a new leaf node containing the data to be inserted. If there
      *is* a left-hand child to follow, return a new branch node with the same label and
@@ -160,12 +162,12 @@ branch called `optional-children-solution`.
    Note that this method makes no attempt to keep our 
    trees balanced.
 
-6. Finally, implement `remove`. On branch nodes there are again several possibilities: 
+6. Implement `remove`. On branch nodes there are again several possibilities: 
         
    - the first is that the label of this node is equal to the value that needs to be 
      removed, in which case return either the tree that is the result of calling 
-     `left.merge(right)` if `left` is not `null`, or simply `right` if `left` is 
-     `null`. 
+     `left.merge(right)` if `left` is not empty, or simply `right` if `left` is 
+     empty. 
    - secondly, the label of this node may be greater than the value
      to be removed, in which case you want to "go left". If you can't go left because 
      there is no left-hand child then the value to be removed isn't in this tree and you can 
